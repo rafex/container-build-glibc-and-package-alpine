@@ -1,6 +1,6 @@
 FROM ubuntu:22.04 as glibc-builder
 
-LABEL org.opencontainers.image.authors="rafex@rafex.dev"
+LABEL maintainer="Rafex <rafex@rafex.dev>"
 
 ENV DEBIAN_FRONTEND=noninteractive \
     GLIBC_VERSION=2.39 \
@@ -16,7 +16,7 @@ RUN apt-get -q update \
 		python3 \
 		texinfo \
 		wget
-		
+
 COPY configparams /glibc-build/configparams
 COPY builder /builder
 ENTRYPOINT ["/builder"]
