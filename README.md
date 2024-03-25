@@ -3,6 +3,4 @@ This container project can use Docker or Podman to create the build process for 
 
 ## build-glibc
 
-
-
 > "This implementation is based on some parts of the work by Sasha Gerrand at https://github.com/sgerrand/docker-glibc-builder."
