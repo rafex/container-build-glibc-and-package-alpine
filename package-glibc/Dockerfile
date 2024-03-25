@@ -19,7 +19,7 @@ RUN mkdir -p $path/upstream
      
 WORKDIR $path/upstream
 COPY ./bin/$glibc_file .
-COPY ["APKBUILD", "glibc-bin.trigger", "ld.so.conf", "nsswitch.conf", "."]
+COPY ["APKBUILD", "glibc-bin.trigger", "ld.so.conf", "nsswitch.conf", "./"]
 RUN ls -la
 
 USER $user
