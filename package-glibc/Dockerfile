@@ -9,9 +9,12 @@ ARG group=abuild \
 	path=/builder \
     glibc_file=glibc-bin-${GLIBC_VERSION}.tar.gz
 
-RUN apk --no-cache add alpine-sdk coreutils
+RUN apk --no-cache add alpine-sdk coreutils sudo
 RUN adduser -G $group -g $group -h /builder -s /bin/ash -D $user 
 RUN cat /etc/passwd
+RUN echo "${user} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$user
+RUN cat /etc/sudoers
+RUN cat /etc/sudoers.d/$user
 RUN mkdir -p $path/upstream
      
 WORKDIR $path/upstream
