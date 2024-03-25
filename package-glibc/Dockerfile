@@ -11,23 +11,25 @@ ARG group=abuild \
 
 RUN apk --no-cache add alpine-sdk coreutils sudo
 RUN adduser -G $group -g $group -h /builder -s /bin/ash -D $user 
-RUN cat /etc/passwd
+# RUN cat /etc/passwd
 RUN echo "${user} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$user
-RUN cat /etc/sudoers
-RUN cat /etc/sudoers.d/$user
+# RUN cat /etc/sudoers
+# RUN cat /etc/sudoers.d/$user
 RUN mkdir -p $path/upstream
      
 WORKDIR $path/upstream
 COPY ./bin/$glibc_file .
-COPY ["APKBUILD", "glibc-bin.trigger", "ld.so.conf", "nsswitch.conf", "/builder/upstream/"]
+COPY ["APKBUILD", "glibc-bin.trigger", "ld.so.conf", "nsswitch.conf", "."]
 RUN ls -la
 
 USER $user
-WORKDIR $path
 
+WORKDIR $path
 RUN abuild-keygen -a -i -n
 RUN mkdir -p packages
-RUN chown -R $user:$group upstream packages
+RUN sudo chown -R $user:$group upstream packages
+RUN ls -la
+
 
 WORKDIR $path/upstream
 RUN sed -i 's/arch=.*/arch="armhf"/g' APKBUILD && \
