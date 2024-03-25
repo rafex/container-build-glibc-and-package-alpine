@@ -5,5 +5,5 @@ source ../scripts-utils/valid_podman.sh
 GLIBC_VERSION=2.39
 
 # Build the image
-docker build --progress=plain -no-cache -t rafex/glibc-package .
+docker build --progress=plain --no-cache -t rafex/glibc-package .
 echo "Built rafex/glibc-package"
