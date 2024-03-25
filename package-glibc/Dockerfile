@@ -6,17 +6,15 @@ ENV GLIBC_VERSION=2.39
 
 ARG group=abuild \
     user=builder \ 
-	path=/builder 
+	path=/builder \
+    glibc_file=glibc-bin-${GLIBC_VERSION}.tar.gz
 
-RUN apk --no-cache add alpine-sdk coreutils sudo 
+RUN apk --no-cache add alpine-sdk coreutils
 RUN adduser -G $group -g $group -h /builder -s /bin/ash -D $user 
 RUN cat /etc/passwd
-RUN echo "${user} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$user
-RUN cat /etc/sudoers
-RUN cat /etc/sudoers.d/$user
 RUN mkdir -p $path/upstream
      
-COPY glibc-bin-${GLIBC_VERSION}.tar.gz $path/upstream
+COPY ./bin/$glibc_file $path/upstream
 COPY ["APKBUILD", "glibc-bin.trigger", "ld.so.conf", "nsswitch.conf", "/builder/upstream/"]
 
 USER $user
@@ -24,7 +22,7 @@ WORKDIR $path
 
 RUN abuild-keygen -a -i -n
 RUN mkdir -p packages
-RUN sudo chown -R $user:$group upstream packages
+RUN chown -R $user:$group upstream packages
 
 WORKDIR $path/upstream
 RUN sed -i 's/arch=.*/arch="armhf"/g' APKBUILD && \
