@@ -14,8 +14,10 @@ RUN adduser -G $group -g $group -h /builder -s /bin/ash -D $user
 RUN cat /etc/passwd
 RUN mkdir -p $path/upstream
      
-COPY ./bin/$glibc_file $path/upstream
+WORKDIR $path/upstream
+COPY ./bin/$glibc_file .
 COPY ["APKBUILD", "glibc-bin.trigger", "ld.so.conf", "nsswitch.conf", "/builder/upstream/"]
+RUN ls -la
 
 USER $user
 WORKDIR $path
@@ -25,7 +27,6 @@ RUN mkdir -p packages
 RUN chown -R $user:$group upstream packages
 
 WORKDIR $path/upstream
-RUN ls -la
 RUN sed -i 's/arch=.*/arch="armhf"/g' APKBUILD && \
     sed -i 's/ld-linux-x86-64.so.2/ld-linux-armhf.so.3/g' APKBUILD && \
     sed -i 's/lib64/lib/g' APKBUILD
